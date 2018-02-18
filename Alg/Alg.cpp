@@ -14,14 +14,16 @@ int main() {
 		scanf("%d", &data[i]);
 	}
 
-	for (i = 0; i < n; i++) {
-		for (j = 0; j < n-1; j++) { //왜 n-1인가 마지막으로 for문을 돌았을때 마지막에는 제일 큰 수가 와있으니 돌지 않아도 된다.
-			if (data[j] > data[j + 1]) {//앞에인덱스에 있는 데이터값이 뒤에있는 값보다 큰경우 둘의 위치를 스위칭해준다
-				tmp = data[j];
-				data[j] = data[j + 1];
-				data[j] = tmp;
-			}
+	for (i = 1; i<n; i++)
+	{
+		temp = data[j];
+		j = i - 1;
+		while (j >= 0 && data[j] > tmp)
+		{
+			data[j + 1] = data[j];
+			j = j - 1;
 		}
+		data[j + 1] = tmp;
 	}
 
 	for (k = 0; k < n; k++) {
