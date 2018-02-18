@@ -1,23 +1,26 @@
 #include<stdio.h>
 
-int factorial(int n);
+int fibonacci(int n);
 
 int main()
 {
 	int number;
+	int i;
 	printf("숫자를 입력하세요 : ");
 	scanf("%d", &number);
-	printf("%d의 팩토리얼 : %d\n", number, factorial(number));
+	for (i = 0; i < number; i++) {
+		printf("%d ", fibonacci(i));
+	}
+	printf("\n\n");
+	return 0;
+
 }
 
-// factorial
-int factorial(int n)
+// fibonacci
+int fibonacci(int n)
 {
-	if (n <= 0)return 0;
-	else if (n==1){
-		return 1;
-	}
+	if (n < 2)return n;
 	else {
-		return n*factorial(n - 1);
+		return fibonacci(n - 1) + fibonacci(n - 2);
 	}
 }
