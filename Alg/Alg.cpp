@@ -1,26 +1,42 @@
 #include<stdio.h>
 
-int fibonacci(int n);
+int gcd(int m,int n);
 
 int main()
 {
-	int number;
+	int m, n;//두수 입력
 	int i;
 	printf("숫자를 입력하세요 : ");
-	scanf("%d", &number);
-	for (i = 0; i < number; i++) {
-		printf("%d ", fibonacci(i));
-	}
-	printf("\n\n");
+	scanf("%d", &m);
+	scanf("%d", &n);
+	
+
 	return 0;
 
 }
 
-// fibonacci
-int fibonacci(int n)
+// 최대 공약수
+int gcd(int m,int n)
 {
-	if (n < 2)return n;
+	if (m < n) {
+		int tmp = m;
+		m = n;
+		n = tmp;
+	}
+	if (m%n == 0) {
+		return n;
+	}
 	else {
-		return fibonacci(n - 1) + fibonacci(n - 2);
+		return gcd(n, m%n);
+	}
+}
+
+int gcds(int m, int n)
+{
+	if (m == 0) {
+		return n;
+	}
+	else {
+		return gcd(n, m%n);
 	}
 }
