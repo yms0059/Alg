@@ -51,22 +51,22 @@ void buildHeap()
 
 void downHeap(int i)
 {
-	int lchild = 2 * i, rchild = lchild + 1; //
-	int tmp = H[i];
+	int lchild = 2 * i, rchild = lchild + 1; //부모의 2*i는 왼쪽자식 (2*i)+1는 오른쪽자식 인덱스
+	int tmp = H[i]; //부모의 key값을 tmp에 입력
 	
-	while (rchild <= n)
+	while (rchild <= n) //오른쪽 인덱스가 현재 입력된 인덱스까지 계속 whlie문을 돈다
 	{
-		if (tmp >= H[lchild] && tmp >= H[rchild])
+		if (tmp >= H[lchild] && tmp >= H[rchild]) //부모의 키값과 자식의키값을 비교한다
 		{
-			H[i] = tmp;
-			return;
+			H[i] = tmp;   //만약 부모key값 그대로 저장하고
+			return;       //return
 		}
-		else if (H[lchild] > H[rchild])
+		else if (H[lchild] > H[rchild]) //왼쪽자식값이 크면 왼쪽자식을 부모값에 저장
 		{
 			H[i] = H[lchild];
-			i = lchild;
+			i = lchild;     //저장하고 i값을 바꿔준다
 		}
-		else
+		else  //오른자식이 크면 이와 반대로 실행
 		{
 			H[i] = H[rchild];
 			i = rchild;
@@ -80,7 +80,7 @@ void downHeap(int i)
 		H[i] = H[lchild];
 		i = lchild;
 	}
-	H[i] = tmp;
+	H[i] = tmp; //tmp값을 오른자식 왼쪽자식에 넣어준다 재배열 완료
 
 }
 
