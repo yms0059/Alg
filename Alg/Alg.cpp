@@ -1,99 +1,112 @@
-#include <stdio.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>		
 
-//상향식 힙생성
-/* 
-   힙을 배열로
-   가장큰 key값을 root로 한다 자식은 부모원소보다 작은 값이 들어가며 
-   힙은 이진트리를 가져야한다
-   ex) 1,3,4,5,7,9 가 차례대로 입력을 받으면 
-       힙 배열에는 9,7,3,4,5,1 로 재배열하게 된다.
-	   9는 root(가장큰값) 그의자식 7,3
-	   7의 자식은 4,5 자신의 인덱스 번호의 2i(왼쪽),2i+1(오른쪽) 이 자식 배열인덱스
-	   3의 자식은 1
-*/ 
+/*
+  힙정렬 -> 제자리정렬 
+*/
 
+int H[100];
+int n, k, i, e;
 
-#define MAX_VAL 9999 //9999보다 큰수가 입력받지 않도록 해놓는다.
+void inPlaceHeapsort(int A[], int n);
+void buildHeap(int A[], int n);
+void insertItem(int A[], int i);
+void downHeap(int A[], int i, int last);
+void printHeap();
+void swap(int *a, int *b);
 
-int H[100]; //배열의 크기를 100으로 크게
-int n = 0;  //힙에 key값이 들어가면 증가
-int i, key;
-char  choice;
-
-
-int main()
-{
-	H[0] = MAX_VAL; //배열 첫번째 인덱스는 가장큰값
+void main() {
 
 	while (1)
 	{
 		scanf("%d", &n);
-
 		for (i = 1; i <= n; i++)
 		{
 			scanf("%d", &H[i]);
 		}
-		buildHeap();
-		printHeap();
+		inPlaceHeapsort(H, n);
 		printf("\n");
+		printHeap();
 		break;
 	}
-	return 0;
 }
 
-void buildHeap()
-{
+void inPlaceHeapsort(int A[], int n) {
 	int i;
-	for (i = n / 2; i >= 1; i--)
-		downHeap(i);
+
+	buildHeap(A, n);  //일력받은 key값을 힙정렬한다 ->buildHeap으로 Go
+
+	for (i = n; i >= 2; i--) {
+		swap(&A[i], &A[1]);  //가장 첫번째 인덱스에있는 Key값이 가장 크기때문에 가장 뒤로 옮긴다.
+		downHeap(A, 1, i - 1); //가장큰 Key값이 뒤에 위치하기때문에 Last값을 i-1로 한다.
+	}
 }
 
+void buildHeap(int A[], int n) {
+	int i;
+	for (i = 2; i <= n; i++) { 
+		insertItem(A, i);  //key값을 비교하여 정렬한다
+	}
+}
 
-void downHeap(int i)
-{
-	int lchild = 2 * i, rchild = lchild + 1; //부모의 2*i는 왼쪽자식 (2*i)+1는 오른쪽자식 인덱스
-	int tmp = H[i]; //부모의 key값을 tmp에 입력
-	
-	while (rchild <= n) //오른쪽 인덱스가 현재 입력된 인덱스까지 계속 whlie문을 돈다
-	{
-		if (tmp >= H[lchild] && tmp >= H[rchild]) //부모의 키값과 자식의키값을 비교한다
-		{
-			H[i] = tmp;   //만약 부모key값 그대로 저장하고
-			return;       //return
-		}
-		else if (H[lchild] > H[rchild]) //왼쪽자식값이 크면 왼쪽자식을 부모값에 저장
-		{
-			H[i] = H[lchild];
-			i = lchild;     //저장하고 i값을 바꿔준다
-		}
-		else  //오른자식이 크면 이와 반대로 실행
-		{
-			H[i] = H[rchild];
-			i = rchild;
-		}
-		lchild = 2 * i;
-		rchild = lchild + 1;
+void insertItem(int A[], int i) {  //힙정렬하는 로직 부모는 자식의Key값보다 크다
+
+	if (i == 1)  
+		return;
+
+	if (A[i] <= A[i / 2])  
+		return;
+
+	swap(&A[i], &A[i / 2]);
+
+	i /= 2;
+
+	insertItem(A, i);
+}
+
+void downHeap(int A[], int i, int last) {// 힙정렬된것을 제자리정렬 비교를 통해 오름차순으로 수를 정렬한다.
+
+	int left, right, greater; //
+
+	left = i * 2;  //왼쪽 자식
+	right = i * 2 + 1;//오른쪽 자식
+
+	if (left > last)
+		return;
+
+	greater = left; 
+
+	if (right <= last) {
+		if (A[right] > A[greater])
+			greater = right;
 	}
 
-	if (lchild == n && tmp < H[lchild])
-	{
-		H[i] = H[lchild];
-		i = lchild;
-	}
-	H[i] = tmp; //tmp값을 오른자식 왼쪽자식에 넣어준다 재배열 완료
+	if (A[i] >= A[greater])
+		return;
 
+	swap(&A[i], &A[greater]);
+
+	downHeap(A, greater, last);
 }
 
-void printHeap()
-{
+void printHeap() {
 	int i;
-	if (n == 0)
-	{
-		printf("\nHeap is empty\n");
+	if (n == 0) {
+		printf("힙이 없어");
 		return;
 	}
-	for (i = 1; i <= n; i++)
-	{
-		printf("%d ", H[i]);
+	for (i = 1; i < n + 1; i++) {
+		printf("%d", H[i]);
+		printf("\n");
 	}
+}
+
+
+void swap(int *a, int *b) {
+	int tmp;
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+
 }
